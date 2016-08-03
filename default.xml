@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+	<remote fetch="https://github.com/01org/" name="origin"/>
+	<default remote="origin" revision="master"/>
+	
+	<project name="CODK-M-Firmware" path="firmware"/>
+	<project name="CODK-M-X86-Samples" path="x86-samples"/>
+	<!-- project name="CODK-M-Software" path="software"/ -->
+	<project name="CODK-M-Manifest" path="manifest"/>
+</manifest>
