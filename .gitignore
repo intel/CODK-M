@@ -1,0 +1,5 @@
+/out/
+.DS_Store
+/firmware/
+/x86-samples/
+/arduino101_software/
