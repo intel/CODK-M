@@ -1,6 +1,6 @@
 TOP_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 CODK_SW_URL := https://github.com/01org/CODK-A-Software.git
-CODK_SW_DIR := $(TOP_DIR)/arduino101_software
+CODK_SW_DIR := $(TOP_DIR)/software
 CODK_SW_TAG ?= master
 CODK_FW_URL := https://github.com/01org/CODK-M-Firmware.git
 CODK_FW_DIR := $(TOP_DIR)/firmware
