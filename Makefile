@@ -94,3 +94,12 @@ clean-firmware:
 
 clean-software:
 	$(MAKE) -C $(SWPROJ_DIR) clean-all
+
+debug-server:
+	$(CODK_FLASHPACK_DIR)/bin/openocd -f $(CODK_FLASHPACK_DIR)/scripts/interface/ftdi/flyswatter2.cfg -f $(CODK_FLASHPACK_DIR)/scripts/board/quark_se.cfg
+
+debug-firmware:
+	gdb $(OUT_DIR)/firmware/zephyr.elf
+
+debug-software:
+	$(CODK_SW_DIR)/arc32/bin/arc-elf32-gdb $(SWPROJ_DIR)/arc-debug.elf
