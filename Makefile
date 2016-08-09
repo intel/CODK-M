@@ -8,8 +8,11 @@ CODK_FW_TAG ?= master
 CODK_X86_URL := https://github.com/01org/CODK-M-X86-Samples.git
 CODK_X86_DIR := $(TOP_DIR)/x86-samples
 CODK_X86_TAG ?= master
+CODK_FLASHPACK_URL := https://github.com/01org/CODK-Z-Flashpack.git
+CODK_FLASHPACK_DIR := $(TOP_DIR)/utils
+CODK_FLASHPACK_TAG := master
 ZEPHYR_DIR := $(TOP_DIR)/../zephyr
-ZEPHYR_DIR_REL := $(shell $(TOP_DIR)/relpath "$(TOP_DIR)" "$(ZEPHYR_DIR)")
+ZEPHYR_DIR_REL = $(shell $(CODK_FLASHPACK_DIR)/relpath "$(TOP_DIR)" "$(ZEPHYR_DIR)")
 ZEPHYR_VER := 1.4.0
 ZEPHYR_SDK_VER := 0.8.1
 OUT_DIR = $(TOP_DIR)/out
@@ -30,7 +33,7 @@ install-dep: check-root
 
 setup: firmware-setup software-setup
 
-clone: $(CODK_SW_DIR) $(CODK_FW_DIR) $(CODK_X86_DIR)
+clone: $(CODK_SW_DIR) $(CODK_FW_DIR) $(CODK_X86_DIR) $(CODK_FLASHPACK_DIR)
 
 $(CODK_SW_DIR):
 	git clone -b $(CODK_SW_TAG) $(CODK_SW_URL) $(CODK_SW_DIR)
@@ -41,12 +44,15 @@ $(CODK_FW_DIR):
 $(CODK_X86_DIR):
 	git clone -b $(CODK_X86_TAG) $(CODK_X86_URL) $(CODK_X86_DIR)
 
+$(CODK_FLASHPACK_DIR):
+	git clone -b $(CODK_FLASHPACK_TAG) $(CODK_FLASHPACK_URL) $(CODK_FLASHPACK_DIR)
+
 check-source:
 	@if [ -z "$(value ZEPHYR_BASE)" ]; then echo "Please run: source $(ZEPHYR_DIR_REL)/zephyr-env.sh" ; exit 1 ; fi
 
 firmware-setup:
 	@echo "Setting up firmware"
-	@./install-zephyr.sh $(ZEPHYR_VER) $(ZEPHYR_SDK_VER)
+	@$(CODK_FLASHPACK_DIR)/install-zephyr.sh $(ZEPHYR_VER) $(ZEPHYR_SDK_VER)
 
 software-setup:
 	@echo "Setting up software"
@@ -68,7 +74,7 @@ upload: upload-dfu
 upload-dfu: upload-firmware-dfu upload-software-dfu
 
 upload-firmware-dfu:
-	$(TOP_DIR)/utils/flash_dfu.sh -x $(OUT_DIR)/firmware/zephyr.bin
+	$(CODK_FLASHPACK_DIR)/flash_dfu.sh -x $(OUT_DIR)/firmware/zephyr.bin
 
 upload-software-dfu:
 	CODK_DIR=$(CODK_DIR) $(MAKE) -C $(SWPROJ_DIR) upload
@@ -76,7 +82,7 @@ upload-software-dfu:
 upload-jtag: upload-firmware-jtag upload-software-jtag
 
 upload-firmware-jtag:
-	$(TOP_DIR)/utils/flash_jtag.sh -x $(OUT_DIR)/firmware/zephyr.bin
+	$(CODK_FLASHPACK_DIR)/flash_jtag.sh -x $(OUT_DIR)/firmware/zephyr.bin
 
 upload-software-jtag:
 	# To-do
