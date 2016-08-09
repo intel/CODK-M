@@ -9,7 +9,7 @@ CODK_X86_URL := https://github.com/01org/CODK-M-X86-Samples.git
 CODK_X86_DIR := $(TOP_DIR)/x86-samples
 CODK_X86_TAG ?= master
 CODK_FLASHPACK_URL := https://github.com/01org/CODK-Z-Flashpack.git
-CODK_FLASHPACK_DIR := $(TOP_DIR)/utils
+CODK_FLASHPACK_DIR := $(TOP_DIR)/flashpack
 CODK_FLASHPACK_TAG := master
 ZEPHYR_DIR := $(TOP_DIR)/../zephyr
 ZEPHYR_DIR_REL = $(shell $(CODK_FLASHPACK_DIR)/relpath "$(TOP_DIR)" "$(ZEPHYR_DIR)")
@@ -29,9 +29,9 @@ check-root:
 install-dep: check-root
 	$(MAKE) install-dep -C $(CODK_SW_DIR)
 	apt-get install -y git make gcc gcc-multilib g++ libc6-dev-i386 g++-multilib python3-ply
-	cp -f $(TOP_DIR)/utils/drivers/rules.d/*.rules /etc/udev/rules.d/
+	cp -f $(CODK_FLASHPACK_DIR)/drivers/rules.d/*.rules /etc/udev/rules.d/
 
-setup: firmware-setup software-setup
+setup: clone firmware-setup software-setup
 
 clone: $(CODK_SW_DIR) $(CODK_FW_DIR) $(CODK_X86_DIR) $(CODK_FLASHPACK_DIR)
 
