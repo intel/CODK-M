@@ -17,7 +17,7 @@ ZEPHYR_VER := 1.4.0
 ZEPHYR_SDK_VER := 0.8.1
 OUT_DIR = $(TOP_DIR)/out
 
-CODK_DIR ?= $(TOP_DIR)
+export CODK_DIR ?= $(TOP_DIR)
 FWPROJ_DIR ?= $(CODK_FW_DIR)
 SWPROJ_DIR ?= $(CODK_SW_DIR)/examples/Blink/
 
