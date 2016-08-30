@@ -1,13 +1,13 @@
 TOP_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
-CODK_SW_URL := https://github.com/01org/CODK-A-Software.git
-CODK_SW_DIR := $(TOP_DIR)/software
-CODK_SW_TAG ?= master
-CODK_FW_URL := https://github.com/01org/CODK-M-Firmware.git
-CODK_FW_DIR := $(TOP_DIR)/firmware
-CODK_FW_TAG ?= master
-CODK_X86_URL := https://github.com/01org/CODK-M-X86-Samples.git
-CODK_X86_DIR := $(TOP_DIR)/x86-samples
+CODK_ARC_URL := https://github.com/01org/CODK-A-ARC.git
+CODK_ARC_DIR := $(TOP_DIR)/arc
+CODK_ARC_TAG ?= master
+CODK_X86_URL := https://github.com/01org/CODK-M-X86.git
+CODK_X86_DIR := $(TOP_DIR)/x86
 CODK_X86_TAG ?= master
+CODK_X86SAMPLES_URL := https://github.com/01org/CODK-M-X86-Samples.git
+CODK_X86SAMPLES_DIR := $(TOP_DIR)/x86-samples
+CODK_X86SAMPLES_TAG ?= master
 CODK_FLASHPACK_URL := https://github.com/01org/CODK-Z-Flashpack.git
 CODK_FLASHPACK_DIR := $(TOP_DIR)/flashpack
 CODK_FLASHPACK_TAG := master
@@ -15,11 +15,13 @@ ZEPHYR_DIR := $(TOP_DIR)/../zephyr
 ZEPHYR_DIR_REL = $(shell $(CODK_FLASHPACK_DIR)/relpath "$(TOP_DIR)" "$(ZEPHYR_DIR)")
 ZEPHYR_VER := 1.4.0
 ZEPHYR_SDK_VER := 0.8.1
-OUT_DIR = $(TOP_DIR)/out
+OUT_DIR := $(TOP_DIR)/out
+OUT_X86_DIR := $(OUT_DIR)/x86
+OUT_ARC_DIR := $(OUT_DIR)/arc
 
 export CODK_DIR ?= $(TOP_DIR)
-FWPROJ_DIR ?= $(CODK_FW_DIR)
-SWPROJ_DIR ?= $(CODK_SW_DIR)/examples/Blink/
+X86_PROJ_DIR ?= $(CODK_X86_DIR)
+ARC_PROJ_DIR ?= $(CODK_ARC_DIR)/examples/Blink/
 
 help:
 
@@ -27,22 +29,22 @@ check-root:
 	@if [ `whoami` != root ]; then echo "Please run as sudoer/root" && exit 1 ; fi
 
 install-dep: check-root
-	$(MAKE) install-dep -C $(CODK_SW_DIR)
+	$(MAKE) install-dep -C $(CODK_ARC_DIR)
 	apt-get install -y git make gcc gcc-multilib g++ libc6-dev-i386 g++-multilib python3-ply
 	cp -f $(CODK_FLASHPACK_DIR)/drivers/rules.d/*.rules /etc/udev/rules.d/
 
-setup: clone firmware-setup software-setup
+setup: clone x86-setup arc-setup
 
-clone: $(CODK_SW_DIR) $(CODK_FW_DIR) $(CODK_X86_DIR) $(CODK_FLASHPACK_DIR)
+clone: $(CODK_ARC_DIR) $(CODK_X86_DIR) $(CODK_X86SAMPLES_DIR) $(CODK_FLASHPACK_DIR)
 
-$(CODK_SW_DIR):
-	git clone -b $(CODK_SW_TAG) $(CODK_SW_URL) $(CODK_SW_DIR)
-
-$(CODK_FW_DIR):
-	git clone -b $(CODK_FW_TAG) $(CODK_FW_URL) $(CODK_FW_DIR)
+$(CODK_ARC_DIR):
+	git clone -b $(CODK_ARC_TAG) $(CODK_ARC_URL) $(CODK_ARC_DIR)
 
 $(CODK_X86_DIR):
 	git clone -b $(CODK_X86_TAG) $(CODK_X86_URL) $(CODK_X86_DIR)
+
+$(CODK_X86SAMPLES_DIR):
+	git clone -b $(CODK_X86SAMPLES_TAG) $(CODK_X86SAMPLES_URL) $(CODK_X86SAMPLES_DIR)
 
 $(CODK_FLASHPACK_DIR):
 	git clone -b $(CODK_FLASHPACK_TAG) $(CODK_FLASHPACK_URL) $(CODK_FLASHPACK_DIR)
@@ -50,56 +52,56 @@ $(CODK_FLASHPACK_DIR):
 check-source:
 	@if [ -z "$(value ZEPHYR_BASE)" ]; then echo "Please run: source $(ZEPHYR_DIR_REL)/zephyr-env.sh" ; exit 1 ; fi
 
-firmware-setup:
-	@echo "Setting up firmware"
+x86-setup:
+	@echo "Setting up x86 Firmware"
 	@$(CODK_FLASHPACK_DIR)/install-zephyr.sh $(ZEPHYR_VER) $(ZEPHYR_SDK_VER)
 
-software-setup:
-	@echo "Setting up software"
-	@$(MAKE) -C $(CODK_SW_DIR) setup
+arc-setup:
+	@echo "Setting up ARC Firmware"
+	@$(MAKE) -C $(CODK_ARC_DIR) setup
 
-compile: compile-firmware compile-software
+compile: compile-x86 compile-arc
 
-compile-firmware: $(OUT_DIR) check-source
-	make O=$(OUT_DIR)/firmware BOARD=arduino_101_factory ARCH=x86 -C $(FWPROJ_DIR)
+compile-x86: $(OUT_DIR) check-source
+	make O=$(OUT_X86_DIR)/ BOARD=arduino_101_factory ARCH=x86 -C $(X86_PROJ_DIR)
 
 $(OUT_DIR):
 	mkdir $(TOP_DIR)/out
 
-compile-software:
-	CODK_DIR=$(CODK_DIR) $(MAKE) -C $(SWPROJ_DIR) compile
+compile-arc:
+	CODK_DIR=$(CODK_DIR) $(MAKE) -C $(ARC_PROJ_DIR) compile
 
 upload: upload-dfu
 
-upload-dfu: upload-firmware-dfu upload-software-dfu
+upload-dfu: upload-x86-dfu upload-arc-dfu
 
-upload-firmware-dfu:
-	$(CODK_FLASHPACK_DIR)/flash_dfu.sh -x $(OUT_DIR)/firmware/zephyr.bin
+upload-x86-dfu:
+	$(CODK_FLASHPACK_DIR)/flash_dfu.sh -x $(OUT_X86_DIR)/zephyr.bin
 
-upload-software-dfu:
-	CODK_DIR=$(CODK_DIR) $(MAKE) -C $(SWPROJ_DIR) upload
+upload-arc-dfu:
+	CODK_DIR=$(CODK_DIR) $(MAKE) -C $(ARC_PROJ_DIR) upload
 
-upload-jtag: upload-firmware-jtag upload-software-jtag
+upload-jtag: upload-x86-jtag upload-arc-jtag
 
-upload-firmware-jtag:
-	$(CODK_FLASHPACK_DIR)/flash_jtag.sh -x $(OUT_DIR)/firmware/zephyr.bin
+upload-x86-jtag:
+	$(CODK_FLASHPACK_DIR)/flash_jtag.sh -x $(OUT_X86_DIR)/zephyr.bin
 
-upload-software-jtag:
+upload-arc-jtag:
 	# To-do
 
-clean: clean-firmware clean-software
+clean: clean-x86 clean-arc
 
-clean-firmware:
+clean-x86:
 	-rm -rf $(OUT_DIR)
 
-clean-software:
-	$(MAKE) -C $(SWPROJ_DIR) clean-all
+clean-arc:
+	$(MAKE) -C $(ARC_PROJ_DIR) clean-all
 
 debug-server:
 	$(CODK_FLASHPACK_DIR)/bin/openocd -f $(CODK_FLASHPACK_DIR)/scripts/interface/ftdi/flyswatter2.cfg -f $(CODK_FLASHPACK_DIR)/scripts/board/quark_se.cfg
 
-debug-firmware:
-	gdb $(OUT_DIR)/firmware/zephyr.elf
+debug-x86:
+	gdb $(OUT_X86_DIR)/zephyr.elf
 
-debug-software:
-	$(CODK_SW_DIR)/arc32/bin/arc-elf32-gdb $(SWPROJ_DIR)/arc-debug.elf
+debug-arc:
+	$(CODK_ARC_DIR)/arc32/bin/arc-elf32-gdb $(ARC_PROJ_DIR)/arc-debug.elf
