@@ -16,6 +16,7 @@ cd CODK-M
 make clone
 sudo make install-dep
 make setup
+export CODK_DIR=$(pwd)
 source ../zephyr/zephyr-env.sh
 ```
 
