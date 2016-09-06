@@ -21,7 +21,7 @@ OUT_ARC_DIR := $(OUT_DIR)/arc
 
 export CODK_DIR ?= $(TOP_DIR)
 X86_PROJ_DIR ?= $(CODK_X86_DIR)
-ARC_PROJ_DIR ?= $(CODK_ARC_DIR)/examples/Blink/
+ARC_PROJ_DIR ?= $(CODK_ARC_DIR)/examples/ASCIITable/
 
 help:
 
