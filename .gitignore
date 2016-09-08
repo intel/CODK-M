@@ -1,6 +1,6 @@
 /out/
 .DS_Store
-/firmware/
+/x86/
 /x86-samples/
-/software/
+/arc/
 /flashpack/
