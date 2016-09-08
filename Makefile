@@ -60,7 +60,7 @@ x86-setup:
 
 arc-setup:
 	@echo "Setting up ARC Firmware"
-	@$(MAKE) -C $(CODK_ARC_DIR) setup
+	@$(MAKE) -C $(CODK_ARC_DIR) setup CORELIBS_URL=https://github.com/01org/corelibs-arduino101/archive/codk-m.zip
 
 compile: compile-x86 compile-arc
 
