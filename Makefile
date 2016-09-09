@@ -11,6 +11,7 @@ CODK_X86SAMPLES_TAG ?= master
 CODK_FLASHPACK_URL := https://github.com/01org/CODK-Z-Flashpack.git
 CODK_FLASHPACK_DIR := $(TOP_DIR)/flashpack
 CODK_FLASHPACK_TAG := master
+BLE_IMAGE  := $(CODK_FLASHPACK_DIR)/images/firmware/ble_core/imagev3.bin
 ZEPHYR_DIR := $(TOP_DIR)/../zephyr
 ZEPHYR_DIR_REL = $(shell $(CODK_FLASHPACK_DIR)/relpath "$(TOP_DIR)" "$(ZEPHYR_DIR)")
 ZEPHYR_VER := 1.4.0
@@ -93,6 +94,9 @@ upload-x86-jtag:
 
 upload-arc-jtag:
 	# To-do
+
+upload-ble-dfu:
+	cd $(CODK_FLASHPACK_DIR) && $(CODK_FLASHPACK_DIR)/flash_ble_dfu.sh $(BLE_IMAGE)
 
 clean: clean-x86 clean-arc
 
