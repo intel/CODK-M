@@ -39,16 +39,21 @@ source ../zephyr/zephyr-env.sh
 
 Default app blinks the pin-13 LED on Arduino 101 board
 
+#### BLE Firmware
+Curie ODK requires an updated BLE firmware. If you're on a factory version, please update.    
+The script will prompt you to manually reset the board.
+- BLE: `make upload-ble-dfu`
+
 ### Debug
 Connect JTAG and open three terminal tabs
 
 ##### Tab 1: Debug Server
 `make debug-server`
 
-##### Tab 2: Firmware
+##### Tab 2: x86
 `make debug-x86`    
 `(gdb) target remote localhost:3334`
 
-##### Tab 3: Software
+##### Tab 3: ARC
 `make debug-arc`    
 `(gdb) target remote localhost:3333`
