@@ -53,6 +53,7 @@ check-root:
 install-dep: check-root
 	$(MAKE) install-dep -C $(CODK_ARC_DIR)
 	apt-get install -y git make gcc gcc-multilib g++ libc6-dev-i386 g++-multilib python3-ply
+	apt-get purge -y modemmaneger
 	usermod -a -G dialout $(SUDO_USER)
 
 setup: clone x86-setup arc-setup
