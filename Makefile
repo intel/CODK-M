@@ -34,7 +34,6 @@ check-root:
 install-dep: check-root
 	$(MAKE) install-dep -C $(CODK_ARC_DIR)
 	apt-get install -y git make gcc gcc-multilib g++ libc6-dev-i386 g++-multilib python3-ply
-	cp -f $(CODK_FLASHPACK_DIR)/drivers/rules.d/*.rules /etc/udev/rules.d/
 
 setup: clone x86-setup arc-setup
 
@@ -79,13 +78,16 @@ convert-sketch:
 
 upload: upload-dfu
 
-upload-dfu: upload-x86-dfu upload-arc-dfu
+upload-dfu: upload-x86-dfu sleepitoff upload-arc-dfu
 
 upload-x86-dfu:
 	$(CODK_FLASHPACK_DIR)/flash_dfu.sh -x $(OUT_X86_DIR)/zephyr.bin
 
 upload-arc-dfu:
 	CODK_DIR=$(CODK_DIR) $(MAKE) -C $(ARC_PROJ_DIR) upload
+
+sleepitoff:
+	sleep 10
 
 upload-jtag: upload-x86-jtag upload-arc-jtag
 
