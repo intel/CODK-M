@@ -115,7 +115,7 @@ upload-x86-jtag:
 	$(CODK_FLASHPACK_DIR)/flash_jtag.sh -x $(OUT_X86_DIR)/zephyr.bin
 
 upload-arc-jtag:
-	# To-do
+	$(CODK_FLASHPACK_DIR)/flash_jtag.sh -a $(ARC_PROJ_DIR)/arc.bin
 
 upload-ble-dfu:
 	cd $(CODK_FLASHPACK_DIR) && $(CODK_FLASHPACK_DIR)/flash_ble_dfu.sh $(BLE_IMAGE)
