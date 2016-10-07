@@ -11,6 +11,7 @@ CODK_X86SAMPLES_TAG ?= master
 CODK_FLASHPACK_URL := https://github.com/01org/CODK-Z-Flashpack.git
 CODK_FLASHPACK_DIR := $(TOP_DIR)/flashpack
 CODK_FLASHPACK_TAG := master
+PROJ_TEMPLATE_DIR := $(TOP_DIR)/template
 BLE_IMAGE  := $(CODK_FLASHPACK_DIR)/images/firmware/ble_core/imagev3.bin
 ZEPHYR_DIR := $(TOP_DIR)/../zephyr
 ZEPHYR_DIR_REL = $(shell $(CODK_FLASHPACK_DIR)/relpath "$(TOP_DIR)" "$(ZEPHYR_DIR)")
@@ -19,6 +20,7 @@ ZEPHYR_SDK_VER := 0.8.1
 OUT_DIR := $(TOP_DIR)/out
 OUT_X86_DIR := $(OUT_DIR)/x86
 OUT_ARC_DIR := $(OUT_DIR)/arc
+PROJNAME := user_project
 
 export CODK_DIR ?= $(TOP_DIR)
 X86_PROJ_DIR ?= $(CODK_X86_DIR)
@@ -137,3 +139,7 @@ debug-x86:
 
 debug-arc:
 	$(CODK_ARC_DIR)/arc32/bin/arc-elf32-gdb $(ARC_PROJ_DIR)/arc-debug.elf
+
+project:
+	@if [ -d $(PROJNAME) ]; then echo "$(PROJNAME) already exists."; exit 1; fi
+	@cp -r $(PROJ_TEMPLATE_DIR) $(PROJNAME)
