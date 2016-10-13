@@ -36,6 +36,7 @@ help:
 	@echo
 	@echo "CODK-M available targets"
 	@echo
+	@echo "project         : create new blank project (PROJ_DIR variable must be set)"
 	@echo "convert-sketch  : convert *.ino to *.cpp (SKETCH variable must be set)"
 	@echo "compile-x86     : compile the x86 application in X86_PROJ_DIR"
 	@echo "compile-arc     : compile the ARC application in ARC_PROJ_DIR"
