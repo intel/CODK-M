@@ -8,7 +8,6 @@ CODK_X86_TAG ?= master
 CODK_X86SAMPLES_URL := https://github.com/01org/CODK-M-X86-Samples.git
 CODK_X86SAMPLES_DIR := $(TOP_DIR)/x86-samples
 CODK_X86SAMPLES_TAG ?= master
-GEN_USER_ENV := $(TOP_DIR)/gen_user_env.sh
 BLANK_ARC := $(CODK_ARC_DIR)/examples/BareMinimum
 BLANK_X86 := $(CODK_X86SAMPLES_DIR)/Blank
 X86SAMPLES_SERVICES_DIR := $(CODK_X86SAMPLES_DIR)/common/arduino101_services
@@ -17,6 +16,7 @@ PROJ_DIR := my_project
 CODK_FLASHPACK_URL := https://github.com/01org/CODK-Z-Flashpack.git
 CODK_FLASHPACK_DIR := $(TOP_DIR)/flashpack
 CODK_FLASHPACK_TAG := master
+GEN_USER_ENV := $(CODK_FLASHPACK_DIR)/gen_user_env.sh
 BLE_IMAGE  := $(CODK_FLASHPACK_DIR)/images/firmware/ble_core/imagev3.bin
 ZEPHYR_DIR := $(TOP_DIR)/../zephyr
 ZEPHYR_DIR_REL = $(shell $(CODK_FLASHPACK_DIR)/relpath "$(TOP_DIR)" "$(ZEPHYR_DIR)")
@@ -96,17 +96,7 @@ project:
 	@mkdir $(CODK_DIR)/$(PROJ_DIR)
 	@cp -r $(BLANK_ARC) $(CODK_DIR)/$(PROJ_DIR)/arc
 	@cp -r $(BLANK_X86) $(CODK_DIR)/$(PROJ_DIR)/x86
-	@$(GEN_USER_ENV) $(CODK_DIR) $(CODK_DIR)/$(PROJ_DIR)
-	@echo
-	@echo "New project created in '$(PROJ_DIR)'"
-	@echo "To work in '$(PROJ_DIR)', exit your current shell session and start"
-	@echo "a new one. Then source your project's env.sh script;"
-	@echo
-	@echo "    $ source $(PROJ_DIR)/env.sh"
-	@echo
-	@echo "Now, you are ready to write code in $(PROJ_DIR)/arc and"
-	@echo "$(PROJ_DIR)/x86"
-	@echo
+	@$(GEN_USER_ENV) $(CODK_DIR) $(PROJ_DIR)
 
 compile: compile-x86 compile-arc
 
