@@ -25,6 +25,8 @@ ZEPHYR_SDK_VER := 0.8.1
 OUT_DIR := $(TOP_DIR)/out
 OUT_X86_DIR := $(OUT_DIR)/x86
 OUT_ARC_DIR := $(OUT_DIR)/arc
+PME_LIB_URL := https://github.com/01org/Intel-Pattern-Matching-Technology
+PME_LIB_DIR :=$(CODK_ARC_DIR)/corelibs/libraries/Intel-Pattern-Matching-Technology
 
 export CODK_DIR ?= $(TOP_DIR)
 X86_PROJ_DIR ?= $(CODK_X86_DIR)
@@ -90,6 +92,7 @@ x86-setup:
 arc-setup:
 	@echo "Setting up ARC Firmware"
 	@$(MAKE) -C $(CODK_ARC_DIR) setup CORELIBS_URL=https://github.com/01org/corelibs-arduino101/archive/codk-m.zip
+	git clone $(PME_LIB_URL) $(PME_LIB_DIR)
 
 project:
 	@if [ -d $(PROJ_DIR) ]; then echo "$(PROJ_DIR) already exists."; exit 1; fi
