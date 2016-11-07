@@ -8,8 +8,8 @@ CODK_X86_TAG ?= master
 CODK_X86SAMPLES_URL := https://github.com/01org/CODK-M-X86-Samples.git
 CODK_X86SAMPLES_DIR := $(TOP_DIR)/x86-samples
 CODK_X86SAMPLES_TAG ?= master
-BLANK_ARC := $(CODK_ARC_DIR)/examples/BareMinimum
-BLANK_X86 := $(CODK_X86SAMPLES_DIR)/Blank
+ARC_PROJ ?= $(CODK_ARC_DIR)/examples/BareMinimum
+X86_PROJ ?= $(CODK_X86SAMPLES_DIR)/Blank
 X86SAMPLES_SERVICES_DIR := $(CODK_X86SAMPLES_DIR)/common/arduino101_services
 X86SAMPLES_ARDUINO_DIR := $(CODK_X86SAMPLES_DIR)/common/arduino
 PROJ_DIR := my_project
@@ -97,8 +97,8 @@ arc-setup:
 project:
 	@if [ -d $(PROJ_DIR) ]; then echo "$(PROJ_DIR) already exists."; exit 1; fi
 	@mkdir $(CODK_DIR)/$(PROJ_DIR)
-	@cp -r $(BLANK_ARC) $(CODK_DIR)/$(PROJ_DIR)/arc
-	@cp -r $(BLANK_X86) $(CODK_DIR)/$(PROJ_DIR)/x86
+	@cp -r $(ARC_PROJ) $(CODK_DIR)/$(PROJ_DIR)/arc
+	@cp -r $(X86_PROJ) $(CODK_DIR)/$(PROJ_DIR)/x86
 	@$(GEN_USER_ENV) $(CODK_DIR) $(PROJ_DIR)
 
 compile: compile-x86 compile-arc
