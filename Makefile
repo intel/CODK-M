@@ -20,8 +20,8 @@ GEN_USER_ENV := $(CODK_FLASHPACK_DIR)/gen_user_env.sh
 BLE_IMAGE  := $(CODK_FLASHPACK_DIR)/images/firmware/ble_core/imagev3.bin
 ZEPHYR_DIR := $(TOP_DIR)/../zephyr
 ZEPHYR_DIR_REL = $(shell $(CODK_FLASHPACK_DIR)/relpath "$(TOP_DIR)" "$(ZEPHYR_DIR)")
-ZEPHYR_VER := 1.5.0
-ZEPHYR_SDK_VER := 0.8.1
+ZEPHYR_VER := 1.6.0
+ZEPHYR_SDK_VER := 0.8.2
 OUT_DIR := $(TOP_DIR)/out
 OUT_X86_DIR := $(OUT_DIR)/x86
 OUT_ARC_DIR := $(OUT_DIR)/arc
@@ -110,7 +110,7 @@ project:
 compile: compile-x86 compile-arc
 
 compile-x86: $(OUT_DIR) check-source
-	make O=$(OUT_X86_DIR)/ BOARD=arduino_101_factory ARCH=x86 -C $(X86_PROJ_DIR)
+	make O=$(OUT_X86_DIR)/ BOARD=arduino_101 ARCH=x86 -C $(X86_PROJ_DIR)
 
 $(OUT_DIR):
 	mkdir $(TOP_DIR)/out
