@@ -16,6 +16,9 @@ PROJ_DIR := my_project
 CODK_FLASHPACK_URL := https://github.com/01org/CODK-Z-Flashpack.git
 CODK_FLASHPACK_DIR := $(TOP_DIR)/flashpack
 CODK_FLASHPACK_TAG := master
+CODK_TOOLS_URL := https://github.com/01org/CODK-Tools.git
+CODK_TOOLS_DIR := $(TOP_DIR)/tools
+CODK_TOOLS_TAG := master
 GEN_USER_ENV := $(CODK_FLASHPACK_DIR)/gen_user_env.sh
 BLE_IMAGE  := $(CODK_FLASHPACK_DIR)/images/firmware/ble_core/imagev3.bin
 ZEPHYR_DIR := $(TOP_DIR)/../zephyr
@@ -73,7 +76,7 @@ install-dep: check-root
 
 setup: clone x86-setup arc-setup
 
-clone: $(CODK_ARC_DIR) $(CODK_X86_DIR) $(CODK_X86SAMPLES_DIR) $(CODK_FLASHPACK_DIR)
+clone: $(CODK_ARC_DIR) $(CODK_X86_DIR) $(CODK_X86SAMPLES_DIR) $(CODK_FLASHPACK_DIR) $(CODK_TOOLS_DIR)
 
 $(CODK_ARC_DIR):
 	git clone -b $(CODK_ARC_TAG) $(CODK_ARC_URL) $(CODK_ARC_DIR)
@@ -87,6 +90,9 @@ $(CODK_X86SAMPLES_DIR):
 
 $(CODK_FLASHPACK_DIR):
 	git clone -b $(CODK_FLASHPACK_TAG) $(CODK_FLASHPACK_URL) $(CODK_FLASHPACK_DIR)
+
+$(CODK_TOOLS_DIR):
+        git clone -b $(CODK_TOOLS_TAG) $(CODK_TOOLS_URL) $(CODK_TOOLS_DIR)
 
 check-source:
 	@if [ -z "$(value ZEPHYR_BASE)" ]; then echo "Please run: source $(ZEPHYR_DIR_REL)/zephyr-env.sh" ; exit 1 ; fi
