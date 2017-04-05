@@ -1,5 +1,5 @@
 TOP_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
-CODK_ARC_URL := https://github.com/01org/CODK-A-ARC.git
+CODK_ARC_URL := https://github.com/01org/CODK-M-ARC.git
 CODK_ARC_DIR := $(TOP_DIR)/arc
 CODK_ARC_TAG ?= master
 CODK_X86_URL := https://github.com/01org/CODK-M-X86.git
