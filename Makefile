@@ -110,7 +110,7 @@ x86-setup:
 
 arc-setup:
 	@echo "Setting up ARC Firmware"
-	@$(MAKE) -C $(CODK_ARC_DIR) setup CORELIBS_URL=https://github.com/01org/corelibs-arduino101/archive/codk-m.zip
+	@$(MAKE) -C $(CODK_ARC_DIR) setup CORELIBS_URL=https://github.com/01org/corelibs-arduino101/archive/codk-m-corelibs.zip
 	git clone $(PME_LIB_URL) $(PME_LIB_DIR)
 
 project:
